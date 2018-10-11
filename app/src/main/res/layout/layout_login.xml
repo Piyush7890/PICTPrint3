@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+
+        android:id="@+id/printit"
+        android:layout_marginTop="64dp"
+        android:layout_gravity="top|center_horizontal"
+        tools:text="PrintIt."
+        android:fontFamily="@font/montserrat"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:paddingStart="24dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="16dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:elevation="24dp"
+        android:background="@drawable/dialog_background"
+        android:clickable="true">
+
+        <TextView
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:textColor="#212121"
+            android:id="@+id/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="4dp"
+            android:text="Login"
+            />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/username_float_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            >
+
+            <AutoCompleteTextView
+                android:alpha="0.5"
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:inputType="textEmailAddress"
+                android:selectAllOnFocus="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_float_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="?colorControlNormal">
+
+            <EditText
+                android:alpha="0.5"
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:selectAllOnFocus="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <FrameLayout
+            android:id="@+id/actions_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <Button
+
+                android:id="@+id/signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="SignUp"
+                android:textColor="?android:colorAccent"
+                style="?android:borderlessButtonStyle" />
+
+            <Button
+                android:textColor="@android:color/white"
+                android:id="@+id/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Login"
+                android:backgroundTint="@color/colorPrimary"
+                />
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

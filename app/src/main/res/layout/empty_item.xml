@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/empty_item"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_margin="32dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <com.piyush.pictprint.views.AnimatedDashLine
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:fontFamily="@font/montserrat"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:text="Add a file to print"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/add_file"
+            style="@style/Base.TextAppearance.AppCompat.Widget.Button.Colored"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Add File"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</FrameLayout>

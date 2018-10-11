@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/header_item"
+    android:layout_gravity="top"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="#46e07d"
+    android:paddingStart="16dp"
+    android:paddingEnd="8dp">
+
+    <TextView
+        android:id="@+id/total_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="R 45" />
+
+    <TextView
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:id="@+id/total_jobs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/total_pages"
+        app:layout_constraintStart_toEndOf="@id/total_price"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Total 5 Documents to print" />
+
+    <TextView
+        android:alpha="0.8"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/total_pages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/total_jobs"
+        app:layout_constraintTop_toBottomOf="@+id/total_jobs"
+        tools:text="32 pages" />
+
+    <Button
+        android:id="@+id/proceed_btn"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/ic_play_button"
+        android:drawablePadding="8dp"
+        android:text="PROCEED"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>
