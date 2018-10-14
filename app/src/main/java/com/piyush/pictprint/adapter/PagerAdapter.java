@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

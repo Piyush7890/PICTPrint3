@@ -5,8 +5,13 @@ package com.piyush.pictprint.CJT;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PrintTicketSection implements Serializable {
+
+    @SerializedName("vendor_ticket_item")
+    private List<Object> vendor_ticket_item = new ArrayList<>();
 
     @SerializedName("color")
     private ColorTicketItem color;

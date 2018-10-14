@@ -1,13 +1,10 @@
 package com.piyush.pictprint.api;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.piyush.pictprint.BuildConfig;
-import com.piyush.pictprint.Constants;
-import com.piyush.pictprint.EncryptDecrypt;
+import com.piyush.pictprint.Utils.Constants;
+import com.piyush.pictprint.Utils.EncryptDecrypt;
 import com.piyush.pictprint.model.LoginRequest;
 import com.piyush.pictprint.model.LoginResponse;
 
@@ -49,16 +46,15 @@ public class LoginService {
     }
 
 
-    public synchronized void login(String username,
+    public  void login(String username,
                                    String password,
                                    final onLoginResponseListener loginListener) throws Exception {
         String json = new Gson().toJson(new LoginRequest(username,password));
         String credential = EncryptDecrypt.encrypt(json);
-        //String credential = EncryptDecrypt.encrypt(username, BuildConfig.ENCRYPTION_KEY);
         buildApi().login(credential).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                loginListener.onLoginResponse(response.body());
+                loginListener.onLoginResponse(response);
             }
 
             @Override
@@ -74,7 +70,7 @@ public class LoginService {
         buildApi().signUp(credential).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                loginResponseListener.onLoginResponse(response.body());
+                loginResponseListener.onLoginResponse(response);
             }
 
             @Override
@@ -87,7 +83,7 @@ public class LoginService {
 
     public interface onLoginResponseListener
     {
-        void onLoginResponse(LoginResponse response);
+        void onLoginResponse(Response<LoginResponse> response);
         void onLoginFailed(String t);
     }
 

@@ -12,6 +12,21 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowTranslucentStatus">true</item>
+    </style>
 
+    <style name="AppTheme.Payment">
+        <item name="android:windowSharedElementEnterTransition">@transition/payment_shared_enter</item>
+    </style>
+<style name="AppTheme.Login.Filter">
+    <item name="android:windowBackground">@color/scrim</item>
+</style>
+
+    <style parent="@style/Widget.AppCompat.Spinner.DropDown" name="SpinnerAsEditText">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    
+    <style name="TextSwitcher" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@android:color/white</item>
     </style>
 </resources>

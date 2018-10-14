@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.Utils;
 
 import android.os.Handler;
 import android.os.Looper;

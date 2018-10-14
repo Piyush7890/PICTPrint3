@@ -1,26 +1,38 @@
 package com.piyush.pictprint;
 
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.piyush.pictprint.Utils.AppExecutors;
+import com.piyush.pictprint.Utils.FileUtils;
+import com.piyush.pictprint.Utils.GridSpacingItemDecoration;
+import com.piyush.pictprint.Utils.MorphTransform;
+import com.piyush.pictprint.Utils.Utils;
+import com.piyush.pictprint.adapter.PreviewAdapter;
+import com.piyush.pictprint.model.Document;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +45,10 @@ import static android.app.Activity.RESULT_OK;
 public class MainFragment extends Fragment {
 
 
+    @BindView(R.id.filter)
+    FloatingActionButton filter;
+
+    OvershootInterpolator overshoot;
     @BindView(R.id.parent)
     ViewGroup parent;
 @BindView(R.id.empty_item)
@@ -57,12 +73,14 @@ PreviewAdapter adapter;
 AppExecutors executors;
 Document document;
 DocumentAddedListener listener;
+    private int pageCount;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         executors = new AppExecutors();
         adapter = new PreviewAdapter();
+        overshoot = new OvershootInterpolator();
     }
 
     @Override
@@ -88,11 +106,45 @@ DocumentAddedListener listener;
             @Override
             public void onClick(View v) {
 
-                Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                String[] mimeTypes =
+                        {"application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+                                "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+                                "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+                                "text/plain",
+                                "application/pdf",
+                                "image/jpg","image/png","image/jpeg"};
+                String mimeTypesStr = "";
+
+
+                Intent fileIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                for (String mimeType : mimeTypes) {
+                    mimeTypesStr += mimeType + "|";
+                }
+                fileIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+
+                 //fileIntent.setType("application/pdf, image/*");
+                //fileIntent.setType(mimeTypesStr.substring(0,mimeTypesStr.length() - 1));
                 fileIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,false);
                 fileIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 fileIntent.setType("*/*");
                 startActivityForResult(fileIntent,250);
+                Log.d("HIIII","HIII1");
+            }
+        });
+
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),CJTActivity.class);
+                intent.putExtra("isPDF", document.getContentType().equals("application/pdf"));
+                intent.putExtra("pageCount",document.getpages());
+                MorphTransform.addExtras(intent,getResources().getColor(R.color.colorAccent)
+                        ,filter.getHeight()/2);
+                ActivityOptions options =
+                        ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                                filter, "sharedElement");
+                startActivityForResult(intent,
+                        500, options.toBundle());
             }
         });
 
@@ -100,11 +152,16 @@ DocumentAddedListener listener;
             @Override
             public void onClick(View v) {
                 setGone();
+                if(document.getCloudJobTicket()==null)
+                document.setCloudJobTicket(Utils.generateDefaultCJT());
                 listener.onDocumentAdded(document);
             }
         });
         return v;
     }
+
+
+
 
     void setGone()
     {
@@ -112,6 +169,7 @@ DocumentAddedListener listener;
         header.setVisibility(View.GONE);
         previewList.setVisibility(View.GONE);
         emptyItem.setVisibility(View.VISIBLE);
+        filter.setVisibility(View.GONE);
     }
 
     @Override
@@ -129,12 +187,14 @@ DocumentAddedListener listener;
             emptyItem.setVisibility(View.GONE);
             header.setVisibility(View.VISIBLE);
             String type =getActivity().getContentResolver().getType(uris.get(0));
+            Log.d("CONTENTTYPE",type);
             icon.setImageDrawable(Utils.getIcon(type,getContext()));
             String filename=Utils.queryName(getContext().getContentResolver(),uris.get(0));
             fileName.setText(filename);
             File file = FileUtils.getFile(getContext(),uris.get(0));
            fileSize.setText(FileUtils.getReadableFileSize((int)file.length()));
             document = new Document(filename,file.length(),System.currentTimeMillis(),type);
+            document.setUri(uris.get(0));
             if(type.equals("application/pdf"))
            {
                progressBar.setVisibility(View.VISIBLE);
@@ -146,14 +206,43 @@ DocumentAddedListener listener;
            }
            else if(type.contains("image"))
             {
+                setFabVisible(true);
                 document.setPrice(Utils.IMAGE_PRICE);
             }
+            else {
+                setFabVisible(true);
+                document.setPrice(Utils.SINGLE_PAGE_PRICE);
 
+
+            }
+
+        }
+
+        if(requestCode==500 && resultCode==RESULT_OK)
+        {
+            document.setCloudJobTicket(Singleton.getInstance().getCloudJobTicket());
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void setFabVisible(boolean b) {
+        if(b)
+        {
+            filter.setScaleX(0);
+            filter.setScaleY(0);
+            filter.setVisibility(View.VISIBLE);
+            filter.animate().scaleX(1).scaleY(1).setInterpolator(overshoot).setDuration(350L).start();
+        }
+        else {
+
+            filter.animate().scaleX(0).scaleY(0).start();
+            filter.setVisibility(View.GONE);
         }
     }
 
     private void openFile(File file) throws IOException{
 
+        addToQueue.setEnabled(false);
         final ParcelFileDescriptor descriptor = ParcelFileDescriptor
                 .open(file,ParcelFileDescriptor.MODE_READ_ONLY);
         if(descriptor!=null) {
@@ -164,7 +253,7 @@ DocumentAddedListener listener;
                     PdfRenderer  renderer = null;
                     try {
                         renderer = new PdfRenderer(descriptor);
-                        document.setpages(renderer.getPageCount());
+                        pageCount=renderer.getPageCount();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -183,8 +272,12 @@ DocumentAddedListener listener;
                     executors.getMainThread().execute(new Runnable() {
                         @Override
                         public void run() {
+                            addToQueue.setEnabled(true);
+                            document.setPrice(pageCount);
+                            document.setpages(pageCount);
                             progressBar.setVisibility(View.GONE);
                             previewList.setVisibility(View.VISIBLE);
+                            setFabVisible(true);
                             adapter.setList(bitmaps);
                         }
                     });

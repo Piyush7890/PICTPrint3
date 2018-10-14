@@ -3,25 +3,25 @@
     package="com.piyush.pictprint">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
+        android:name=".PICTPrint"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
         <provider
-            android:name=".LocalStorageProvider"
+            android:name=".Utils.LocalStorageProvider"
             android:authorities="com.ianhanniballake.localstorage.document2"
             android:enabled="true"
             android:exported="true"
@@ -32,13 +32,26 @@
             </intent-filter>
         </provider>
 
-        <activity android:name=".LoginActivity"
-            android:theme="@style/AppTheme.Login">
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.Login" />
+        <activity android:name=".PaymentActivity"
+            android:theme="@style/AppTheme.Payment"/>
+        <activity android:name=".EmptyActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".CJTActivity"
+            android:theme="@style/AppTheme.Login.Filter"
+            />
+
+        <activity android:name="com.paytm.pgsdk.PaytmPGActivity"
+            android:screenOrientation="portrait" android:configChanges="keyboardHidden|orientation|keyboard"/>
+
+        <service android:name=".JobSubmitService" />
     </application>
 
 </manifest>

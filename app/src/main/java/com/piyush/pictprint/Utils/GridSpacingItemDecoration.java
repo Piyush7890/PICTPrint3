@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.Utils;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.DimenRes;

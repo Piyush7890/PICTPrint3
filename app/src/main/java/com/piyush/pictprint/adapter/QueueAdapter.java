@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.piyush.pictprint.R;
+import com.piyush.pictprint.Utils.Utils;
+import com.piyush.pictprint.model.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +23,24 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueItemVie
         documents = new ArrayList<>();
     }
 
-    public void addDocument(Document document)
+    public void setDoucments(List<Document> documents)
     {
-        documents.add(document);
-        notifyItemInserted(documents.size());
+        this.documents = documents;
+        notifyDataSetChanged();
     }
 
+    public void addDocument(Document document)
+    {
+        this.documents.add(document);
+        notifyItemInserted(this.documents.size());
+    }
+
+    public void addDocuments(List<Document> documents)
+    {
+        this.documents=documents;
+        notifyDataSetChanged();
+
+    }
     @NonNull
     @Override
     public QueueItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -57,7 +73,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueItemVie
         return documents.size();
     }
 
-     class QueueItemViewHolder extends RecyclerView.ViewHolder {
+
+
+    class QueueItemViewHolder extends RecyclerView.ViewHolder {
             ImageView icon;
             TextView fileName;
             TextView count_and_time;

@@ -1,20 +1,15 @@
 package com.piyush.pictprint;
 
-import android.animation.ValueAnimator;
 import android.graphics.drawable.AnimationDrawable;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.piyush.pictprint.adapter.LoginPagerAdapter;
 import com.piyush.pictprint.api.LoginService;
-import com.piyush.pictprint.model.LoginResponse;
+import com.piyush.pictprint.listeners.onLoginListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity implements onLoginListener, LoginService.onLoginResponseListener {
+public class LoginActivity extends AppCompatActivity implements onLoginListener {
 
 @BindView(R.id.parent)
     ViewGroup parent;
@@ -66,23 +61,5 @@ public class LoginActivity extends AppCompatActivity implements onLoginListener,
         viewPager.setCurrentItem(1);
     }
 
-    @Override
-    public void onLogin(String username, String password) {
-        try {
-            service.login(username,password, this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Failed to encrypt string", Toast.LENGTH_SHORT).show();
-        }
-    }
 
-    @Override
-    public void onLoginResponse(LoginResponse response) {
-
-    }
-
-    @Override
-    public void onLoginFailed(String t) {
-        Toast.makeText(this, t, Toast.LENGTH_SHORT).show();
-    }
 }

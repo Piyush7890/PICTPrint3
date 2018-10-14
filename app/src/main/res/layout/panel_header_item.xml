@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="#46e07d"
+    android:background="@drawable/bg"
     android:paddingStart="16dp"
     android:paddingEnd="8dp">
 

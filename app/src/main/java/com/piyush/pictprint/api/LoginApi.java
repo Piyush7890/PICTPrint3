@@ -8,9 +8,10 @@ import retrofit2.http.Query;
 
 public interface LoginApi {
 
-    @POST("signup")
+    @POST("login")
     public Call<LoginResponse> login(@Query("credentials")String credentials);
 
+    @POST("signup")
     public Call<LoginResponse> signUp(@Query("credentials")String credentials);
 
 }

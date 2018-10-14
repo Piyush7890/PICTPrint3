@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.Utils;
 
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
@@ -14,6 +14,8 @@ import android.provider.DocumentsContract.Root;
 import android.provider.DocumentsProvider;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import com.piyush.pictprint.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;

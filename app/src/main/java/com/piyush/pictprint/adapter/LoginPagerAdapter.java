@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

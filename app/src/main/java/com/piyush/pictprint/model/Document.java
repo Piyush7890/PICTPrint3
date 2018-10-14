@@ -1,12 +1,24 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.model;
 
+import android.net.Uri;
+
+import com.piyush.pictprint.CJT.CloudJobTicket;
+
+import org.parceler.Parcel;
+
+@Parcel
 public class Document {
-    private String name;
-    private double size;
-    private int price;
-    private long time;
-    private String contentType;
-    private int pages;
+     String name;
+     double size;
+     int price;
+     long time;
+     String contentType;
+     int pages;
+     String uri;
+     String  cloudJobTicket;
+
+     public  Document()
+     {}
 
     public Document(String name, double size, long time, String contentType) {
         this.name = name;
@@ -63,5 +75,21 @@ public class Document {
 
     public void setpages(int pages) {
         this.pages = pages;
+    }
+
+    public Uri getUri() {
+        return Uri.parse(uri);
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri.toString();
+    }
+
+    public String  getCloudJobTicket() {
+        return cloudJobTicket;
+    }
+
+    public void setCloudJobTicket(String cloudJobTicket) {
+        this.cloudJobTicket = cloudJobTicket;
     }
 }

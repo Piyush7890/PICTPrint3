@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.Utils;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

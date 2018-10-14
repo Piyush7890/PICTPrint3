@@ -1,6 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:id="@+id/total_amount_layout"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="8dp"
+        android:background="@drawable/bg"
+        android:elevation="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/total_amount_text"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@id/total_amount"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#fff"
+            android:text="Total Amount"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginEnd="4dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="16dp"
+            android:text="₹"
+            android:layout_toLeftOf="@id/total_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextSwitcher"
+            />
+
+        <TextSwitcher
+            android:layout_alignParentTop="true"
+            android:inAnimation="@anim/fade_in_slide_in"
+            android:outAnimation="@anim/fade_out_slide_out"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/total_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_alignParentEnd="true"
+            />
+
+        <com.piyush.pictprint.views.TotalItemsLayout
+            android:id="@+id/pdf_total_amount"
+            android:layout_width="match_parent"
+            android:layout_below="@id/total_amount"
+            android:layout_height="wrap_content"/>
+        <com.piyush.pictprint.views.TotalItemsLayout
+            android:layout_below="@id/pdf_total_amount"
+            android:id="@+id/images_total_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <com.piyush.pictprint.views.TotalItemsLayout
+            android:id="@+id/docs_total_amount"
+            android:layout_below="@id/images_total_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:background="@android:color/white"
+        android:elevation="2dp"
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/total_amount_layout"
+        android:id="@+id/items"
+        android:maxHeight="250dp"
+        />
+
+
+
+
+<Button
+    android:id="@+id/proceed"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginBottom="32dp"
+    app:layout_constraintStart_toStartOf="parent"
+android:paddingTop="6dp"
+android:paddingBottom="6dp"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:textColor="@android:color/white"
+android:background="@drawable/buttonbg"
+    android:backgroundTint="#00bcd4"
+    android:text="PROCEED TO PAY"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/progress_submit_job"/>
 
 </android.support.constraint.ConstraintLayout>

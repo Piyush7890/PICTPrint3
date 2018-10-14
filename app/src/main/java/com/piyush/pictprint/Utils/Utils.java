@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.Utils;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -12,10 +12,26 @@ import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import com.google.gson.Gson;
+import com.piyush.pictprint.CJT.CloudJobTicket;
+import com.piyush.pictprint.CJT.ColorTicketItem;
+import com.piyush.pictprint.CJT.CopiesTicketItem;
+import com.piyush.pictprint.CJT.MarginsTicketItem;
+import com.piyush.pictprint.CJT.PageOrientationTicketItem;
+import com.piyush.pictprint.CJT.PageRangeTicketItem;
+import com.piyush.pictprint.CJT.PrintTicketSection;
+import com.piyush.pictprint.CJT.cdd.PageOrientationType;
+import com.piyush.pictprint.CJT.cdd.Type;
+import com.piyush.pictprint.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Utils {
 
     public static final int IMAGE_PRICE=2;
     public static final int SINGLE_PAGE_PRICE=1;
+    private static String cjt;
 
     public static float convertDpToPixel(float dp, Context context) {
         return dp * ((float) context.getResources()
@@ -68,5 +84,28 @@ public class Utils {
             view.setSystemUiVisibility(flags);
             context.getWindow().setStatusBarColor(Color.parseColor("#F0F0F0"));
         }
+    }
+
+    public static String generateDefaultCJT()
+    {
+        if(cjt==null)
+        {
+            CloudJobTicket cloudJobTicket = new CloudJobTicket();
+            cloudJobTicket.setVersion("1.0");
+            PrintTicketSection printTicketSection = new PrintTicketSection();
+            ColorTicketItem colorTicketItem = new ColorTicketItem();
+            colorTicketItem.setType(Type.STANDARD_MONOCHROME);
+            printTicketSection.setColor(colorTicketItem);
+            CopiesTicketItem copiesTicketItem = new CopiesTicketItem();
+            copiesTicketItem.setCopies(1);
+            printTicketSection.setCopies(copiesTicketItem);
+            PageOrientationTicketItem pageOrientationTicketItem = new PageOrientationTicketItem();
+            pageOrientationTicketItem.setType(PageOrientationType.PORTRAIT);
+            printTicketSection.setPageOrientation(pageOrientationTicketItem);
+            cloudJobTicket.setPrinter(printTicketSection);
+             cjt = new Gson().toJson(cloudJobTicket);
+
+        }
+        return cjt;
     }
 }

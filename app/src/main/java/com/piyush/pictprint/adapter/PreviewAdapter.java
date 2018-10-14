@@ -1,4 +1,4 @@
-package com.piyush.pictprint;
+package com.piyush.pictprint.adapter;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.piyush.pictprint.R;
+
 import java.util.ArrayList;
 import java.util.List;
 

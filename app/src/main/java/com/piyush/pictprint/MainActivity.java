@@ -2,6 +2,10 @@ package com.piyush.pictprint;
 
 import android.Manifest;
 import android.animation.ArgbEvaluator;
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,7 +22,10 @@ import android.widget.TextView;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.listener.single.BasePermissionListener;
-import com.piyush.pictprint.CJT.cdd.Color;
+import com.piyush.pictprint.Utils.Utils;
+import com.piyush.pictprint.adapter.PagerAdapter;
+import com.piyush.pictprint.adapter.QueueAdapter;
+import com.piyush.pictprint.model.Document;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -66,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
                 .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new BasePermissionListener())
                 .check();
+
         lightFlags = slidingUpPanelLayout.getSystemUiVisibility();
         darkFlags = lightFlags|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
         initialColor = getResources().getColor(R.color.colorPrimary);
@@ -92,14 +100,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d("SIZEINPROCEED",String.valueOf(documents.size()));
+                Singleton.getInstance().setDocuments(documents);
+               // ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,header,"paymentTransition");
+                startActivityForResult(new Intent(MainActivity.this, PaymentActivity.class),350);
             }
         });
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 header.setAlpha(1-slideOffset);
-                getWindow().setStatusBarColor(((Integer) evaluator.evaluate(slideOffset,initialColor, android.graphics.Color.WHITE )));
+                getWindow().setStatusBarColor(((Integer) evaluator.evaluate(slideOffset,
+                        initialColor,
+                        android.graphics.Color.WHITE )));
                 if(slideOffset>0.75)
                     panel.setSystemUiVisibility(darkFlags);
                 else
@@ -116,16 +129,57 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
 
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==350 && resultCode==RESULT_OK)
+        {
+            documents = (Singleton.getInstance()).getDocuments();
+            if(documents.isEmpty())
+                slidingUpPanelLayout.setPanelHeight(0);
+            Log.d("DOCUMENTSULT",String.valueOf(documents.size()));
+            price=total_docs=total_pages=0;
+            for(int i=0;i<documents.size();i++) {
+                price += documents.get(i).getPrice();
+                total_pages+=documents.get(i).getpages();
+            }
+            total_docs = documents.size();
+            setTotalDocs(total_docs,total_pages);
+            setPrice(price);
+            queueAdapter.addDocuments(documents);
+
+        }
+    }
+
     @Override
     public void onDocumentAdded(Document document) {
         slidingUpPanelLayout.setPanelHeight(Math.round(Utils.convertDpToPixel(56,this)));
+        Log.d("INADDED",String.valueOf(documents.size()));
         documents.add(document);
-        queueAdapter.addDocument(document);
+        Log.d("INADDED2",String.valueOf(documents.size()));
+
+        queueAdapter.setDoucments(documents);
+        Log.d("INADDED3",String.valueOf(documents.size()));
+
         header.setVisibility(View.VISIBLE);
         price+=document.getPrice();
         total_docs++;
+        setPrice(price);
         total_pages+=document.getpages();
+        setTotalDocs(total_docs,total_pages);
+
+    }
+
+    private void setPrice(int price)
+    {
         totalPrice.setText(String.format("₹%s", String.valueOf(price)));
+
+    }
+
+    public void setTotalDocs(int total_docs,int total_pages)
+    {
         if(total_docs==1) {
             totalJobs.setText("1 Document to print");
             totalPages.setText("1 page");
@@ -133,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
         }
         else
         {totalJobs.setText(String.format("%s Documents to print", String.valueOf(total_docs)));
-        totalPages.setText(String.format("%s pages", String.valueOf(total_pages)));
-    }}
+            totalPages.setText(String.format("%s pages", String.valueOf(total_pages)));
+        }
+    }
 }

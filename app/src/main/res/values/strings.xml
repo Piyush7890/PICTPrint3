@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">PICT Print</string>
+
+
+    <string-array name="Colors">
+        <item>Black &amp; White</item>
+        <item>Color</item>
+
+    </string-array>
+
+
+    <string-array name="Orientation">
+        <item>Portrait</item>
+        <item>Landscape</item>
+    </string-array>
+
 </resources>
