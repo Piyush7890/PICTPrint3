@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="spacing_micro">4dp</dimen>
+    <dimen name="dialog_corners">4dp</dimen>
+</resources>
