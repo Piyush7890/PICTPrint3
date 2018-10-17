@@ -8,8 +8,10 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PatternMatcher;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
+import android.util.Patterns;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -26,6 +28,7 @@ import com.piyush.pictprint.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -107,5 +110,11 @@ public class Utils {
 
         }
         return cjt;
+    }
+
+
+    public static boolean isEmailValid(String email)
+    {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }

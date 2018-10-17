@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
@@ -43,7 +44,6 @@ public class JobSubmitService extends IntentService {
         super(JobSubmitService.class.getName());
 
 
-        submitJobService = new SubmitJobService("");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             channel = new NotificationChannel("Submit Job", "Job Submission", NotificationManager.IMPORTANCE_LOW);
             channel2 = new NotificationChannel("Submit Job2", "Job Submission", NotificationManager.IMPORTANCE_HIGH);
@@ -57,6 +57,7 @@ public class JobSubmitService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         documentsCount=0;
         int failedDocs=0;
+        submitJobService = new SubmitJobService(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("Token",""));
         List<Document> documents = Parcels.unwrap(intent.getParcelableExtra("Documents"));
         this.documentsCount = documents.size();
        for(int i=0;i<documents.size();i++)

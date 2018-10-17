@@ -47,6 +47,8 @@ public class LoginFragment extends Fragment implements LoginService.onLoginRespo
     AutoCompleteTextView username;
 
 
+
+
     @BindView(R.id.password)
     EditText password;
     @BindView(R.id.signup)

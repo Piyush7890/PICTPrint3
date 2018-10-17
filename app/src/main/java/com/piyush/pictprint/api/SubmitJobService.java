@@ -37,7 +37,7 @@ public class SubmitJobService {
     {
         if(client==null)
             client = new OkHttpClient.Builder()
-                   // .addInterceptor(new Interceptor(token))
+                    .addInterceptor(new Interceptor(token))
                     .connectTimeout(100, TimeUnit.SECONDS)
                     .readTimeout(100,TimeUnit.SECONDS).build();
 

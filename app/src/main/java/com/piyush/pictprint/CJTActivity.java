@@ -146,7 +146,7 @@ public class CJTActivity extends AppCompatActivity {
                 }
                 pageOrientationTicketItem.setType(pageOrientationType);
                 printTicketSection.setPageOrientation(pageOrientationTicketItem);
-                if(!isPDF)
+                if(isPDF)
                 {
                     PageRangeTicketItem rangeTicketItem = new PageRangeTicketItem();
                     String[] ranges = range.getText().toString().split(",");
@@ -161,6 +161,7 @@ public class CJTActivity extends AppCompatActivity {
                 }
                 cloudJobTicket.setPrinter(printTicketSection);
                 String cjt = new Gson().toJson(cloudJobTicket);
+                Log.d("CLOUDJOB", cjt);
                 Singleton.getInstance().setCloudJobTicket(cjt);
                 setResult(RESULT_OK);
                 finish();

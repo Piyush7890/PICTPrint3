@@ -59,7 +59,7 @@ public class LocalStorageProvider extends DocumentsProvider {
         row.add(Root.COLUMN_DOCUMENT_ID, homeDir.getAbsolutePath());
         row.add(Root.COLUMN_TITLE, "Internal Storage");
         row.add(Root.COLUMN_FLAGS, Root.FLAG_LOCAL_ONLY | Root.FLAG_SUPPORTS_CREATE);
-        row.add(Root.COLUMN_ICON, R.drawable.ic_launcher_foreground);
+        row.add(Root.COLUMN_ICON, R.drawable.ic_done_black_24dp);
         // These columns are optional
         row.add(Root.COLUMN_AVAILABLE_BYTES, homeDir.getFreeSpace());
         // Root.COLUMN_MIME_TYPE is another optional column and useful if you

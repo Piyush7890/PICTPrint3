@@ -49,7 +49,7 @@ public class LoginService {
     public  void login(String username,
                                    String password,
                                    final onLoginResponseListener loginListener) throws Exception {
-        String json = new Gson().toJson(new LoginRequest(username,password));
+        String json = new Gson().toJson(new LoginRequest("",username,password));
         String credential = EncryptDecrypt.encrypt(json);
         buildApi().login(credential).enqueue(new Callback<LoginResponse>() {
             @Override
@@ -64,9 +64,9 @@ public class LoginService {
         });
 
     }
-    public synchronized void onSignUp(String username, String password, final onLoginResponseListener loginResponseListener)
+    public synchronized void onSignUp(String email, String username, String password, final onLoginResponseListener loginResponseListener)
     {
-        String credential = EncryptDecrypt.encrypt(new Gson().toJson(new LoginRequest(username,password)));
+        String credential = EncryptDecrypt.encrypt(new Gson().toJson(new LoginRequest(email, username,password)));
         buildApi().signUp(credential).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.piyush.pictprint.Utils.ColorUtil;
+import com.piyush.pictprint.Utils.Utils;
 import com.piyush.pictprint.api.LoginService;
 import com.piyush.pictprint.model.LoginResponse;
 
@@ -37,6 +38,9 @@ public class SignUpFragment  extends Fragment implements LoginService.onLoginRes
 
     @BindView(R.id.username)
     AutoCompleteTextView username;
+
+    @BindView(R.id.email)
+    AutoCompleteTextView email;
 
     @BindView(R.id.password)
     EditText password;
@@ -72,8 +76,9 @@ public class SignUpFragment  extends Fragment implements LoginService.onLoginRes
             public void onClick(View v) {
                 String Username = username.getText().toString();
                 String Password = password.getText().toString();
+                String Email = email.getText().toString();
                 String ConfirmPassword = comfirmPassword.getText().toString();
-                if(Username.isEmpty()||Password.isEmpty()||ConfirmPassword.isEmpty())
+                if(Username.isEmpty()||Password.isEmpty()||ConfirmPassword.isEmpty()|| Email.isEmpty())
                 {
                     if(Username.isEmpty())
                         username.setError("Username can't be empty");
@@ -81,6 +86,8 @@ public class SignUpFragment  extends Fragment implements LoginService.onLoginRes
                         password.setError("Password can't be empty");
                     if(ConfirmPassword.isEmpty())
                         comfirmPassword.setError("Password can't be empty");
+                    if(Email.isEmpty())
+                        email.setError("Email can't be empty");
                     return;
                 }
                 if(!Password.equals(ConfirmPassword))
@@ -88,8 +95,13 @@ public class SignUpFragment  extends Fragment implements LoginService.onLoginRes
                     Toast.makeText(getContext(), "Passwords don't match", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(!Utils.isEmailValid(Email))
+                {
+                    Toast.makeText(getContext(), "Enter a valid email", Toast.LENGTH_SHORT).show();
+                return;
+                }
                 setProgressBarGone(true);
-                service.onSignUp(Username,Password,SignUpFragment.this);
+                service.onSignUp(Email,Username,Password,SignUpFragment.this);
             }
         });
         return v;

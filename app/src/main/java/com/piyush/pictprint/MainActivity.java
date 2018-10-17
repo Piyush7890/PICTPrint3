@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -16,6 +17,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -131,6 +134,35 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
 
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mainmenu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.log_out: {
+                logOut();
+                Intent i = new Intent(this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+                break;
+            }
+        }
+        return false;
+    }
+
+    private void logOut() {
+        SharedPreferences.Editor editor =PreferenceManager.getDefaultSharedPreferences(this).edit();
+        editor.remove("Token");
+        editor.remove("Username");
+        editor.remove("LoggedIn");
+        editor.apply();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         super.onActivityResult(requestCode,resultCode,data);
@@ -139,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
             documents = (Singleton.getInstance()).getDocuments();
             if(documents.isEmpty())
                 slidingUpPanelLayout.setPanelHeight(0);
-            Log.d("DOCUMENTSULT",String.valueOf(documents.size()));
             price=total_docs=total_pages=0;
             for(int i=0;i<documents.size();i++) {
                 price += documents.get(i).getPrice();
@@ -156,12 +187,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
     @Override
     public void onDocumentAdded(Document document) {
         slidingUpPanelLayout.setPanelHeight(Math.round(Utils.convertDpToPixel(56,this)));
-        Log.d("INADDED",String.valueOf(documents.size()));
         documents.add(document);
-        Log.d("INADDED2",String.valueOf(documents.size()));
 
         queueAdapter.setDoucments(documents);
-        Log.d("INADDED3",String.valueOf(documents.size()));
 
         header.setVisibility(View.VISIBLE);
         price+=document.getPrice();

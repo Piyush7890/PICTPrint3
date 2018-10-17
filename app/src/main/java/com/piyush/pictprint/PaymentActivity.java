@@ -36,7 +36,6 @@ import com.piyush.pictprint.views.TotalItemsLayout;
 
 import org.parceler.Parcels;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,9 +43,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.plaidapp.ui.recyclerview.FilterSwipeDismissListener;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+
 
 
 public class PaymentActivity extends AppCompatActivity implements
@@ -123,7 +120,7 @@ public class PaymentActivity extends AppCompatActivity implements
         animator.setDuration(100*count);
         animator.setInterpolator(new FastOutSlowInInterpolator());
         animator.start();
-        service = new ChecksumService();
+        service = new ChecksumService(PreferenceManager.getDefaultSharedPreferences(this).getString("Token",""));
         String token = PreferenceManager.getDefaultSharedPreferences(PaymentActivity.this).getString("Token", null);
         submitJobService = new SubmitJobService(token);
         adapter = new QueueAdapter2();
@@ -223,10 +220,10 @@ public class PaymentActivity extends AppCompatActivity implements
         Intent i = new Intent(PaymentActivity.this, JobSubmitService.class);
         i.putExtra("Documents",Parcels.wrap(doucments));
         startService(i);
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-//        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     @Override

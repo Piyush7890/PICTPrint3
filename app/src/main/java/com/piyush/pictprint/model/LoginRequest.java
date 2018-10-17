@@ -1,9 +1,11 @@
 package com.piyush.pictprint.model;
 
 public class LoginRequest {
+    private String email;
     private String username;
 
-    public LoginRequest(String username, String password) {
+    public LoginRequest(String email, String username, String password) {
+        this.email = email;
         this.username = username;
         this.password = password;
     }
