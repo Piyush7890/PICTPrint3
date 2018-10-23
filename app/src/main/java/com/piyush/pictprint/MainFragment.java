@@ -165,7 +165,7 @@ DocumentAddedListener listener;
                 else {
                     CloudJobTicket ticket = Singleton.getInstance().getCloudJobTicket();
                     int copies = ticket.getPrinter().getCopies().getCopies();
-                    float price =0;
+                    int price =0;
                     if(document.getContentType().equals("application/pdf"))
                     {
                         List<PageRangeTicketItem.Interval> intervals = ticket.getPrinter().getPageRange().getIntervals();
@@ -174,14 +174,15 @@ DocumentAddedListener listener;
                         PageRangeTicketItem.Interval interval = intervals.get(i);
                         price+=interval.getEnd()-interval.getStart()+1;
                     }
+                    document.setpages(price);
                     document.setCopies(copies);
                     price*=copies;
-                    document.setPrice(Math.round(price));
+                    document.setPrice(price);
                 }
                 else if(document.getContentType().contains("image"))
                     price=copies*Utils.IMAGE_PRICE;
                     document.setCopies(copies);
-                    document.setPrice(Math.round(price));
+                    document.setPrice(price);
                 }
                 listener.onDocumentAdded(document);
             }
