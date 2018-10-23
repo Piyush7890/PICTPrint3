@@ -73,7 +73,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <com.piyush.pictprint.MaxHeightRecyclerView
         android:background="@android:color/white"
         android:elevation="2dp"
         android:layout_margin="16dp"
@@ -82,7 +82,6 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/total_amount_layout"
         android:id="@+id/items"
-        android:maxHeight="250dp"
         />
 
 

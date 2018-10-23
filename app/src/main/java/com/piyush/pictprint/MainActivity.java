@@ -2,21 +2,22 @@ package com.piyush.pictprint;
 
 import android.Manifest;
 import android.animation.ArgbEvaluator;
-import android.app.ActivityOptions;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,12 +67,67 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
     List<Document> documents;
     private int price,total_pages,total_docs;
     int initialColor, lightFlags, darkFlags;
-    
+    int primaryColor;
+    AlertDialog.Builder builder;
+    AlertDialog proceedDialog;
+    AlertDialog exitDialog;
+
+    DialogInterface.OnShowListener plistener = new DialogInterface.OnShowListener() {
+        @Override
+        public void onShow(DialogInterface dialog) {
+            proceedDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(primaryColor);
+            proceedDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(primaryColor);        }
+    };
+
+    DialogInterface.OnShowListener elistener = new DialogInterface.OnShowListener() {
+        @Override
+        public void onShow(DialogInterface dialog) {
+            exitDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(primaryColor);
+            exitDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(primaryColor);        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
+
+         proceedDialog = builder.setTitle("Proceed?")
+                .setMessage("You haven't added the document.")
+                .setPositiveButton("PROCEED ANYWAYS", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivityForResult(new Intent(MainActivity.this, PaymentActivity.class),350);
+
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                }).create();
+      proceedDialog.setOnShowListener(plistener);
+
+
+         exitDialog = builder.setTitle("Are you sure?")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                }).create();
+        exitDialog.setOnShowListener(elistener);
+
+
+
+
+
+        primaryColor = getResources().getColor(R.color.colorPrimary);
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new BasePermissionListener())
@@ -81,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
         darkFlags = lightFlags|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
         initialColor = getResources().getColor(R.color.colorPrimary);
         final ArgbEvaluator evaluator = new ArgbEvaluator();
-        List<Fragment> fragments = new ArrayList<>();
+        final List<Fragment> fragments = new ArrayList<>();
         fragments.add(new MainFragment());
         fragments.add(new ListFragment());
         List<String> titles = new ArrayList<>();
@@ -103,10 +159,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("SIZEINPROCEED",String.valueOf(documents.size()));
                 Singleton.getInstance().setDocuments(documents);
-               // ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,header,"paymentTransition");
-                startActivityForResult(new Intent(MainActivity.this, PaymentActivity.class),350);
+                if(((MainFragment) fragments.get(0)).isDocumentPresent())
+                {
+
+
+                           // .
+                    // setIcon(android.R.drawable.ic_dialog_alert)
+                            proceedDialog.show();
+
+                }
+                else
+                    startActivityForResult(new Intent(MainActivity.this, PaymentActivity.class),350);
+
+                // ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,header,"paymentTransition");
             }
         });
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
@@ -198,6 +264,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
         total_pages+=document.getpages();
         setTotalDocs(total_docs,total_pages);
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+
+
+            //    .setIcon(android.R.drawable.ic_dialog_alert)
+                exitDialog.show();
     }
 
     private void setPrice(int price)

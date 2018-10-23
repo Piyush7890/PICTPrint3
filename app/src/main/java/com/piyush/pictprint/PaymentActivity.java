@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.transition.TransitionManager;
@@ -117,7 +118,7 @@ public class PaymentActivity extends AppCompatActivity implements
                 textSwitcher.setText(String.valueOf((int) animation.getAnimatedValue()));
             }
         });
-        animator.setDuration(100*count);
+        animator.setDuration(100*count>500?500:100*count);
         animator.setInterpolator(new FastOutSlowInInterpolator());
         animator.start();
         service = new ChecksumService(PreferenceManager.getDefaultSharedPreferences(this).getString("Token",""));
@@ -125,6 +126,7 @@ public class PaymentActivity extends AppCompatActivity implements
         submitJobService = new SubmitJobService(token);
         adapter = new QueueAdapter2();
         items.setAdapter(adapter);
+        items.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         ItemTouchHelper.Callback  callback = new FilterTouchHelperCallback( this,this);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(items);
@@ -182,31 +184,38 @@ public class PaymentActivity extends AppCompatActivity implements
     }
 
     private void setTotalItems() {
-        int pdf_count=0,img_count=0,doc_count=0,pdf_pages=0;
+        int pdf_count=0,img_count=0,doc_count=0,pdf_pages=0,img_pages=0,doc_pages=0;
         for(int i=0;i<doucments.size();i++)
         {
             Document document = doucments.get(i);
             if(document.getContentType().contains("pdf"))
             {
                 pdf_count++;
-                pdf_pages+=document.getpages();
+                pdf_pages+=document.getpages()*document.getCopies();
             }
             else if(document.getContentType().contains("image"))
+            {
                 img_count++;
-            else
+                img_pages+=document.getpages()*document.getCopies();
+
+            }
+            else {
                 doc_count++;
+                doc_pages+=document.getpages()*document.getCopies();
+
+            }
         }
         pdf_layout.setAmount(pdf_pages);
         pdf_layout.setPages(pdf_pages);
         pdf_layout.setTotal_text(pdf_count==1?"1 PDF":pdf_count+" PDFs");
 
-        img_layout.setAmount(2*img_count);
-        img_layout.setPages(img_count);
+        img_layout.setAmount(2*img_pages);
+        img_layout.setPages(img_pages);
         img_layout.setTotal_text(img_count==1?"1 Image":img_count+" Images");
 
         docs_layout.setAmount(2*doc_count);
-        docs_layout.setPages(doc_count);
-        docs_layout.setTotal_text(doc_count==1?"1 Image":doc_count+" Images");
+        docs_layout.setPages(doc_pages);
+        docs_layout.setTotal_text(doc_count==1?"1 Document":doc_count+" Documents");
 
 
         TransitionManager.beginDelayedTransition(parent);

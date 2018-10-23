@@ -160,9 +160,9 @@ public class CJTActivity extends AppCompatActivity {
                     printTicketSection.setPageRange(rangeTicketItem);
                 }
                 cloudJobTicket.setPrinter(printTicketSection);
-                String cjt = new Gson().toJson(cloudJobTicket);
-                Log.d("CLOUDJOB", cjt);
-                Singleton.getInstance().setCloudJobTicket(cjt);
+               // String cjt = new Gson().toJson(cloudJobTicket);
+                //Log.d("CLOUDJOB", cjt);
+                Singleton.getInstance().setCloudJobTicket(cloudJobTicket);
                 setResult(RESULT_OK);
                 finish();
                 overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

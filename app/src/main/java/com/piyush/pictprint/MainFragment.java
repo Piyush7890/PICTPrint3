@@ -25,6 +25,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.piyush.pictprint.CJT.CloudJobTicket;
+import com.piyush.pictprint.CJT.PageRangeTicketItem;
 import com.piyush.pictprint.Utils.AppExecutors;
 import com.piyush.pictprint.Utils.FileUtils;
 import com.piyush.pictprint.Utils.GridSpacingItemDecoration;
@@ -81,6 +84,11 @@ DocumentAddedListener listener;
         executors = new AppExecutors();
         adapter = new PreviewAdapter();
         overshoot = new OvershootInterpolator();
+    }
+
+    public boolean isDocumentPresent()
+    {
+        return emptyItem.getVisibility() != View.VISIBLE;
     }
 
     @Override
@@ -154,6 +162,27 @@ DocumentAddedListener listener;
                 setGone();
                 if(document.getCloudJobTicket()==null)
                 document.setCloudJobTicket(Utils.generateDefaultCJT());
+                else {
+                    CloudJobTicket ticket = Singleton.getInstance().getCloudJobTicket();
+                    int copies = ticket.getPrinter().getCopies().getCopies();
+                    float price =0;
+                    if(document.getContentType().equals("application/pdf"))
+                    {
+                        List<PageRangeTicketItem.Interval> intervals = ticket.getPrinter().getPageRange().getIntervals();
+                        for(int i=0;i<intervals.size();i++)
+                    {
+                        PageRangeTicketItem.Interval interval = intervals.get(i);
+                        price+=interval.getEnd()-interval.getStart()+1;
+                    }
+                    document.setCopies(copies);
+                    price*=copies;
+                    document.setPrice(Math.round(price));
+                }
+                else if(document.getContentType().contains("image"))
+                    price=copies*Utils.IMAGE_PRICE;
+                    document.setCopies(copies);
+                    document.setPrice(Math.round(price));
+                }
                 listener.onDocumentAdded(document);
             }
         });
@@ -163,6 +192,7 @@ DocumentAddedListener listener;
 
 
 
+    @SuppressLint("RestrictedApi")
     void setGone()
     {
         TransitionManager.beginDelayedTransition(parent);
@@ -220,7 +250,9 @@ DocumentAddedListener listener;
 
         if(requestCode==500 && resultCode==RESULT_OK)
         {
-            document.setCloudJobTicket(Singleton.getInstance().getCloudJobTicket());
+             String cjt = new Gson().toJson(Singleton.getInstance().getCloudJobTicket());
+
+            document.setCloudJobTicket(cjt);
         }
     }
 

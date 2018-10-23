@@ -17,7 +17,13 @@ public class Document {
      String uri;
      String  cloudJobTicket;
 
-     public  Document()
+    public int getCopies() {
+        return copies;
+    }
+
+    int copies;
+
+    public  Document()
      {}
 
     public Document(String name, double size, long time, String contentType) {
@@ -27,6 +33,13 @@ public class Document {
         this.time = time;
         this.contentType = contentType;
         pages=1;
+        copies=1;
+    }
+
+    public void setCopies(int copies)
+    {
+
+        this.copies = copies;
     }
 
     public String getName() {

@@ -13,7 +13,7 @@ public class Singleton {
         // Create the instance
         private static Singleton instance;
     private List<Document> documents;
-    private String cloudJobTicket;
+    private CloudJobTicket cloudJobTicket;
 
     public static Singleton getInstance()
         {
@@ -48,13 +48,13 @@ public class Singleton {
         documents.remove(index);
     }
 
-    public void setCloudJobTicket(String cloudJobTicket)
+    public void setCloudJobTicket(CloudJobTicket cloudJobTicket)
     {
 
         this.cloudJobTicket = cloudJobTicket;
     }
 
-    public String getCloudJobTicket() {
+    public CloudJobTicket getCloudJobTicket() {
         return cloudJobTicket;
     }
 }

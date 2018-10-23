@@ -53,9 +53,9 @@
 
     <Button
         android:id="@+id/proceed_btn"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:background="?selectableItemBackgroundBorderless"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:drawableEnd="@drawable/ic_play_button"
         android:drawablePadding="8dp"
         android:text="PROCEED"
