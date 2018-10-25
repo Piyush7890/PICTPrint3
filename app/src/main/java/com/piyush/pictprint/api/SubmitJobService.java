@@ -88,7 +88,7 @@ public class SubmitJobService {
                 {
                     listener.onJobsFetched(response.body());
                 }
-                else listener.onJobsFetchFailed("Username or email already exists");
+                else listener.onJobsFetchFailed("An error occured while fetching jobs.");
             }
 
             @Override

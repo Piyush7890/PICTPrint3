@@ -154,7 +154,7 @@ public class SignUpFragment  extends Fragment implements LoginService.onLoginRes
             }
         }
         else {
-            Toast.makeText(getContext(), "Some error occured!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Username or email already exists.", Toast.LENGTH_SHORT).show();
         }
         setProgressBarGone(false);
     }
