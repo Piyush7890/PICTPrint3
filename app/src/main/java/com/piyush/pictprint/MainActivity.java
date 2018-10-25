@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Docu
             case R.id.log_out: {
                 logOut();
                 Intent i = new Intent(this, LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 finish();
                 break;

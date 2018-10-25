@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.piyush.pictprint.Utils.Constants;
 import com.piyush.pictprint.model.Document;
+import com.piyush.pictprint.model.JobsListWrapper;
 import com.piyush.pictprint.model.SubmitResponse;
 
 import java.util.concurrent.TimeUnit;
@@ -74,6 +75,39 @@ public class SubmitJobService {
 //        });
         return buildApi().submit(file,document.getCloudJobTicket());
     }
+
+
+
+
+    public void fetchJobs(final JobsFetchedListener listener)
+    {
+        buildApi().fetchJobs().enqueue(new Callback<JobsListWrapper>() {
+            @Override
+            public void onResponse(Call<JobsListWrapper> call, Response<JobsListWrapper> response) {
+                if(response.code()==200)
+                {
+                    listener.onJobsFetched(response.body());
+                }
+                else listener.onJobsFetchFailed("Username or email already exists");
+            }
+
+            @Override
+            public void onFailure(Call<JobsListWrapper> call, Throwable t) {
+
+                listener.onJobsFetchFailed(t.toString());
+            }
+        });
+    }
+
+
+    public interface JobsFetchedListener
+    {
+        void onJobsFetched(JobsListWrapper jobsListWrapper);
+        void onJobsFetchFailed(String error);
+    }
+
+
+
 
     public  void submitJobAsync(MultipartBody.Part file, final Document document, final Listener listener)
     {
